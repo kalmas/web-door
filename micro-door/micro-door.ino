@@ -1,5 +1,31 @@
 #include <SoftwareSerial.h>
 
+char* passcodes[] = {
+  "4B00DA49A971", // spare??
+  "05003D765C12", //vinny
+  "4B00DA30B415", //ross
+  "4B00DA14F772", //jon
+  "4B00DA359034", //steve
+  "4B00DA2249FA", //mandy
+  "4B00DA3EF05F", //dyanna
+  "1A004116317C", //??
+  "1E009A81F9FC", //??
+  "1A004162261F", //??
+  "05007EA84E9D", // cody
+  "040016B3B716", // adam
+  "040007B29021", // s2
+  "040007AE4DE0", // s3
+  "4800E4F6C2980", // pete
+  "05003DC468940", // chuck
+  "05003E29D5C70", // shelby
+  "040006CE428E0", //phil
+  "05003E02D5EC", //jacki
+  "0400175FF2BE", //kyle
+  "05003DC60EF0", //chris
+  "04001AD10DC2", //boby
+  "04001ACFF627" //andrea  
+};
+
 /*
  * Lock control, on equals open
  */
@@ -52,16 +78,34 @@ void setup()
   pinMode(RFIDResetPin, OUTPUT);
   digitalWrite(RFIDResetPin, HIGH);
 }
+
+char tagString[13];
+int tagIndex = 0;
  
 void loop()
 {
-  /*
-   * Pass RFID tag down the USB
+  /** 
+   * Read from RFID
    */
   if (mySerial.available()) {
-    Serial.write(mySerial.read());
+    
+    while(mySerial.available()) {
+
+      int readByte = Serial.read();
+
+      if (readByte != 2 && readByte != 10 && readByte != 13) {
+        tagString[tagIndex] = readByte;
+        tagIndex = tagIndex + 1;
+      }
+    }
+
+    if (isAllowed(tagString)) {
+      digitalWrite(lockPin, HIGH);
+      delay(2000);
+      digitalWrite(lockPin, LOW);
+    }
   }
-  
+
   /**
    * Control lock
    */
@@ -74,4 +118,30 @@ void loop()
       digitalWrite(lockPin, LOW);
     }
   }
+}
+
+boolean isAllowed(char tagString[])
+{
+  for (int i = 0; i < 23; i++) {
+    if (match(tagString, passcodes[i])) {
+      return true;
+    }
+
+    return false;
+  }
+}
+
+boolean match(char one[], char two[])
+{
+  if (strlen(one) == 0) {
+    return false;
+  }
+
+  for (int i = 0; i < 12; i++) {
+    if (one[i] != two[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
