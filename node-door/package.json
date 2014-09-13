@@ -1,0 +1,9 @@
+{
+  "name": "node-door",
+  "version": "0.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "keypress": "^0.2.1",
+    "serialport": "^1.4.6"
+  }
+}
