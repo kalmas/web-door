@@ -25,6 +25,7 @@ char* passcodes[] = {
   "04001AD10DC2", //boby
   "04001ACFF627" //andrea  
 };
+int passcodeCount = 23;
 
 /*
  * Lock control, on equals open
@@ -84,40 +85,54 @@ int tagIndex = 0;
  
 void loop()
 {
+  tagIndex = 0;
+  
   /** 
    * Read from RFID
    */
+  // Serial.write("here");
   if (mySerial.available()) {
+    //  Serial.write("there");
     
-    while(mySerial.available()) {
+    Serial.write("Incoming\n");
+    while(tagIndex < 13) {
+      if (mySerial.available()) {
+        int readByte = mySerial.read();
 
-      int readByte = Serial.read();
-
-      if (readByte != 2 && readByte != 10 && readByte != 13) {
-        tagString[tagIndex] = readByte;
-        tagIndex = tagIndex + 1;
+        if (readByte != 2 && readByte != 10 && readByte != 13) {
+          tagString[tagIndex] = readByte;
+          tagIndex = tagIndex + 1;
+        }
       }
     }
 
+
+    Serial.write("Tag: ");
+    Serial.write(tagString);
+    Serial.write("\n");
+    
     if (isAllowed(tagString)) {
+      Serial.write("Open Sesame!");
       digitalWrite(lockPin, HIGH);
       delay(2000);
       digitalWrite(lockPin, LOW);
+    } else {
+      Serial.write("Sry, Not Allowed :(");
     }
   }
 
   /**
    * Control lock
    */
-  if (Serial.available()) {
-    int incomingByte = Serial.read();
- 
-    if (incomingByte == 0x01) {
-      digitalWrite(lockPin, HIGH);
-    } else if (incomingByte == 0x00) {
-      digitalWrite(lockPin, LOW);
-    }
-  }
+//  if (Serial.available()) {
+//    int incomingByte = Serial.read();
+// 
+//    if (incomingByte == 0x01) {
+//      digitalWrite(lockPin, HIGH);
+//    } else if (incomingByte == 0x00) {
+//      digitalWrite(lockPin, LOW);
+//    }
+//  }
 }
 
 boolean isAllowed(char tagString[])
@@ -126,13 +141,13 @@ boolean isAllowed(char tagString[])
     if (match(tagString, passcodes[i])) {
       return true;
     }
-
-    return false;
   }
+
+  return false;
 }
 
 boolean match(char one[], char two[])
-{
+{ 
   if (strlen(one) == 0) {
     return false;
   }
