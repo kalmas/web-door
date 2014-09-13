@@ -124,20 +124,20 @@ void loop()
   /**
    * Control lock
    */
-//  if (Serial.available()) {
-//    int incomingByte = Serial.read();
-// 
-//    if (incomingByte == 0x01) {
-//      digitalWrite(lockPin, HIGH);
-//    } else if (incomingByte == 0x00) {
-//      digitalWrite(lockPin, LOW);
-//    }
-//  }
+  if (Serial.available()) {
+    int incomingByte = Serial.read();
+ 
+    if (incomingByte == 0x01) {
+      digitalWrite(lockPin, HIGH);
+    } else if (incomingByte == 0x00) {
+      digitalWrite(lockPin, LOW);
+    }
+  }
 }
 
 boolean isAllowed(char tagString[])
 {
-  for (int i = 0; i < 23; i++) {
+  for (int i = 0; i < passcodeCount; i++) {
     if (match(tagString, passcodes[i])) {
       return true;
     }
