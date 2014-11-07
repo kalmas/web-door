@@ -1,11 +1,14 @@
-var express = require('express'),
-  router = express.Router(),
-  serialport = require('serialport'),
-  SerialPort = serialport.SerialPort,
-  serial = new SerialPort('/dev/tty.usbmodem1411', {
-    baudrate: 9600,
-    parser: serialport.parsers.readline("\n")
-  });
+var port = 'ttyACM0';
+// var port = '/dev/tty.usbmodem1411';
+
+var express = require('express');
+var router = express.Router();
+var serialport = require('serialport');
+var SerialPort = serialport.SerialPort;
+var serial = new SerialPort(port, {
+  baudrate: 9600,
+  parser: serialport.parsers.readline("\n")
+});
 
 var close = function() {
   serial.write(new Buffer([0x00]));
