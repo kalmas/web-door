@@ -1,4 +1,4 @@
-var port = 'ttyACM0';
+var port = '/dev/ttyACM0';
 // var port = '/dev/tty.usbmodem1411';
 
 var express = require('express');

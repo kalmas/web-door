@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/usr/bin/sudo /usr/local/bin/node /home/pi/hello-node.js < /dev/null &
+/usr/bin/sudo /usr/local/bin/node /home/pi/web-door/node-door/app.js

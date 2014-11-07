@@ -22,7 +22,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -42,4 +41,8 @@ app.use(function(err, req, res, next) {
     });
 });
 
-module.exports = app;
+var port = 80;
+app.listen(port);
+
+console.log('started on ' + port);
+
