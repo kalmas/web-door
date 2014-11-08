@@ -24,7 +24,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/open', function(req, res) {
-  res.render('open', { title: 'Its Open!'});
+  res.send();
   open();
   setTimeout(close, 2000);
 });
