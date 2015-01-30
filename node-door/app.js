@@ -2,8 +2,6 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 
-var routes = require('./routes/index');
-
 var app = express();
 
 // view engine setup
@@ -13,7 +11,8 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+app.use('/', require('./routes/index'));
+app.use('/or', require('./routes/orientation'));
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -27,7 +26,7 @@ app.use(function(err, req, res, next) {
   res.send();
 });
 
-var port = 80;
+var port = 8081;
 
 app.listen(port);
 console.log('started on ' + port);

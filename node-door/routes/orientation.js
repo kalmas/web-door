@@ -10,23 +10,18 @@ var serial = new SerialPort(port, {
   parser: serialport.parsers.readline("\n")
 });
 
-var close = function() {
-  serial.write(new Buffer([0x00]));
+function send() {
+  serial.write(new Buffer([127, x, y]));
 };
 
-var open = function() {
-  serial.write(new Buffer([0x01]));
-};
-
-/* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Who Dat?' });
+  console.log('here');
+  res.render('orientation', { title: 'Device Orientation' });
 });
 
-router.post('/open', function(req, res) {
+router.get('/coord', function(req, res) {
   res.send();
-  open();
-  setTimeout(close, 2000);
+  send(10, 10);
 });
 
 module.exports = router;
